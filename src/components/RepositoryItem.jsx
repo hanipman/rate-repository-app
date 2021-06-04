@@ -22,6 +22,7 @@ const style = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
     padding: 5
   },
   descrip_col: {
@@ -36,11 +37,11 @@ const style = StyleSheet.create({
     margin: 10
   },
   language_text: {
+    flexGrow: 1,
     backgroundColor: theme.colors.primary,
     color: theme.colors.textPrimary,
     alignSelf: 'flex-start',
     borderRadius: 5,
-    padding: 5,
   },
   stats: {
     display: 'flex',
@@ -67,8 +68,8 @@ const RepositoryItem = ({ item }) => {
       <View style={style.flex_row}> 
         <Image style={style.tinyLogo} source={{ uri: item.ownerAvatarUrl }} />
         <View style={style.flex_col}>
-          <Text color='textSecondary' fontWeight='bold' style={{ padding: 2 }}>{item.fullName}</Text>
-          <Text color='textSecondary' style={{ padding: 2 }}>{item.description}</Text>
+          <Text color='textSecondary' fontWeight='bold' style={{ flexGrow: 1 }}>{item.fullName}</Text>
+          <Text color='textSecondary' style={{ flexGrow: 1 }}>{item.description}</Text>
           <Text style={style.language_text}>{item.language}</Text>
         </View>
       </View>

@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <AppBarTab text={'Repository'} />
+      <AppBarTab text={'Repository'}  route={'/'} />
+      <AppBarTab text={'Sign In'} route={'/signin'} />
     </View>
   );
 };
