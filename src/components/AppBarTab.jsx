@@ -8,6 +8,9 @@ const style = StyleSheet.create({
 	container: {
 		flexGrow: 1,
 		marginTop: 10,
+    marginBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
 	}
 });
 
