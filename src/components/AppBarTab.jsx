@@ -17,9 +17,9 @@ const style = StyleSheet.create({
 const AppBarTab = ({ text, route }) => {
 	return (
 		<Pressable style={style.container}>
-      <Link to={route}>
-		  	<Text>{text}</Text>
-      </Link>
+			<Link to={route}>
+				<Text>{text}</Text>
+			</Link>
 		</Pressable>
 	);
 };
