@@ -37,6 +37,22 @@ const validationSchema = yup.object().shape({
     .required('Password is required')
 });
 
+export const SignInContainer = ({ onSubmit }) => {
+  return (
+    <Formik style={styles.container} initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+      {({ handleSubmit }) => (
+        <View style={styles.container}>
+          <FormikTextInput testID='usernameField' name='username' placeholder='Username' />
+          <FormikTextInput testID='passwordField' name='password' placeholder='Password' secureTextEntry={true}/>
+          <Pressable testID='submitButton' style={styles.signInButton} onPress={handleSubmit}>
+            <Text style={styles.signInButton}>Sign In</Text>
+          </Pressable>
+        </View>
+      )}
+    </Formik>
+  );
+};
+
 const SignIn = () => {
   const [signIn] = useSignIn();
   let history = useHistory();
@@ -45,26 +61,42 @@ const SignIn = () => {
     const { username, password } = values;
     try {
       const { data } = await signIn({ username, password });
-      console.log(data);
       history.push('/');
     } catch (e) {
       console.log(e);
     }
   };
 
-  return (
-    <Formik style={styles.container} initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-      {({ handleSubmit }) => (
-        <View style={styles.container}>
-          <FormikTextInput name='username' placeholder='Username' />
-          <FormikTextInput name='password' placeholder='Password' secureTextEntry={true}/>
-          <Pressable style={styles.signInButton} onPress={handleSubmit}>
-            <Text style={styles.signInButton}>Sign In</Text>
-          </Pressable>
-        </View>
-      )}
-    </Formik>
-  );
+  return <SignInContainer onSubmit={onSubmit} />;
 };
+
+// const SignIn = () => {
+//   const [signIn] = useSignIn();
+//   let history = useHistory();
+
+//   const onSubmit = async (values) => {
+//     const { username, password } = values;
+//     try {
+//       const { data } = await signIn({ username, password });
+//       history.push('/');
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   };
+
+//   return (
+//     <Formik style={styles.container} initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+//       {({ handleSubmit }) => (
+//         <View style={styles.container}>
+//           <FormikTextInput name='username' placeholder='Username' />
+//           <FormikTextInput name='password' placeholder='Password' secureTextEntry={true}/>
+//           <Pressable style={styles.signInButton} onPress={handleSubmit}>
+//             <Text style={styles.signInButton}>Sign In</Text>
+//           </Pressable>
+//         </View>
+//       )}
+//     </Formik>
+//   );
+// };
 
 export default SignIn;

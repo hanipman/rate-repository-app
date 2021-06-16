@@ -62,6 +62,8 @@ const ItemSeparator = () => <View style={styles.separator} />;
 export const RepositoryListContainer = ({ repositories }) => {
   const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
 
+  console.log(repositoryNodes);
+
   return (
     <FlatList
       data={repositoryNodes}
@@ -78,8 +80,11 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
-  return <RepositoryListContainer repositories={repositories} />;
+  const { data, error, loading } = useRepositories();
+  if (loading) return null;
+  if (error) return `Error: ${error}`;
+
+  return <RepositoryListContainer repositories={data.repositories} />;
 };
 
 // const RepositoryList = () => {
