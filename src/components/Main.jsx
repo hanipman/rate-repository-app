@@ -5,6 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-native';
 import AppBar from './AppBar';
 import RepositoryList from './RepositoryList';
 import SignIn from './SignIn';
+import SingleRepository from './SingleRepository';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,10 +16,6 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
-  // const onSubmit = (values) => {
-  //   console.log(values);
-  // };
-
   return (
     <View style={styles.container}>
       <AppBar />
@@ -28,6 +25,9 @@ const Main = () => {
         </Route>
         <Route path="/signin" exact>
           <SignIn/>
+        </Route>
+        <Route path="/repository/:id" exact>
+          <SingleRepository />
         </Route>
         <Redirect to="/" />
       </Switch>

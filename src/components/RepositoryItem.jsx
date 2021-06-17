@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image, View, StyleSheet } from 'react-native';
+import { Image, Pressable, View, StyleSheet } from 'react-native';
+import { useHistory } from 'react-router-native';
 
 import Text from './Text';
 
@@ -41,7 +42,10 @@ const style = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     color: theme.colors.textPrimary,
     alignSelf: 'flex-start',
+    borderStyle: 'solid',
     borderRadius: 5,
+    overflow: 'hidden',
+    padding: 5
   },
   stats: {
     display: 'flex',
@@ -54,6 +58,8 @@ const style = StyleSheet.create({
 });
 
 const RepositoryItem = ({ item }) => {
+  const history = useHistory();
+
   const formatValue = (val) => {
     if (val < 1000) {
       return val;
@@ -63,35 +69,63 @@ const RepositoryItem = ({ item }) => {
     }
   };
 
+  const onPress = () => {
+    history.push(`/repository/${item.id}`);
+  };
+
   return (
-    <View style={style.container}>
-      <View style={style.flex_row}> 
-        <Image style={style.tinyLogo} source={{ uri: item.ownerAvatarUrl }} testID='logo' />
-        <View style={style.flex_col}>
-          <Text color='textSecondary' fontWeight='bold' style={{ flexGrow: 1 }} testID='fullName' >{item.fullName}</Text>
-          <Text color='textSecondary' style={{ flexGrow: 1 }} testID='description'>{item.description}</Text>
-          <Text style={style.language_text} testID='language'>{item.language}</Text>
+    <Pressable onPress={onPress} >
+      <View style={style.container}>
+        <View style={style.flex_row}> 
+          <Image style={style.tinyLogo} source={{ uri: item.ownerAvatarUrl }} testID='logo' />
+          <View style={style.flex_col}>
+            <Text color='textSecondary' fontWeight='bold' style={{ flexGrow: 1 }} testID='fullName' >
+              {item.fullName}
+            </Text>
+            <Text color='textSecondary' style={{ flexGrow: 1 }} testID='description'>
+              {item.description}
+            </Text>
+            <Text style={style.language_text} testID='language'>
+              {item.language}
+            </Text>
+          </View>
+        </View>
+        <View style={style.flex_row}>
+          <View style={style.stats}>
+            <Text color='textSecondary' fontWeight='bold' testID='star'>
+              {formatValue(item.stargazersCount)}
+            </Text>
+            <Text color='textSecondary'>
+              Stars
+            </Text>
+          </View>
+          <View style={style.stats}>
+            <Text color='textSecondary' fontWeight='bold' testID='fork'>
+              {formatValue(item.forksCount)}
+            </Text>
+            <Text color='textSecondary'>
+              Forks
+            </Text>
+          </View>
+          <View style={style.stats}>
+            <Text color='textSecondary' fontWeight='bold' testID='review'>
+              {formatValue(item.reviewCount)}
+            </Text>
+            <Text color='textSecondary'>
+              Reviews
+            </Text>
+          </View>
+          <View style={style.stats}>
+            <Text color='textSecondary' fontWeight='bold' testID='rating'>
+              {formatValue(item.ratingAverage)}
+            </Text>
+            <Text color='textSecondary'>
+              Rating
+            </Text>
+          </View>
         </View>
       </View>
-      <View style={style.flex_row}>
-        <View style={style.stats}>
-          <Text color='textSecondary' fontWeight='bold' testID='star'>{formatValue(item.stargazersCount)}</Text>
-          <Text color='textSecondary'>Stars</Text>
-        </View>
-        <View style={style.stats}>
-          <Text color='textSecondary' fontWeight='bold' testID='fork'>{formatValue(item.forksCount)}</Text>
-          <Text color='textSecondary'>Forks</Text>
-        </View>
-        <View style={style.stats}>
-          <Text color='textSecondary' fontWeight='bold' testID='review'>{formatValue(item.reviewCount)}</Text>
-          <Text color='textSecondary'>Reviews</Text>
-        </View>
-        <View style={style.stats}>
-          <Text color='textSecondary' fontWeight='bold' testID='rating'>{formatValue(item.ratingAverage)}</Text>
-          <Text color='textSecondary'>Rating</Text>
-        </View>
-      </View>
-    </View>
+    </Pressable>
   );
 };
 
