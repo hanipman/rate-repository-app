@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     textAlign: 'center',
     padding: 5,
-    paddingTop: 8,
+    paddingTop: 10,
     width: 40,
     height: 40,
     borderRadius: 40 / 2,
@@ -46,7 +46,7 @@ const ReviewItem = ({ item }) => {
 	return (
 		<View style={styles.container}>
       <View styles={styles.rating}>
-        <Text style={styles.ratingText}>
+        <Text style={styles.ratingText} fontWeight='bold'>
           {item.rating}
         </Text>
       </View>

@@ -43,9 +43,10 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab text={'Repository'}  route={'/'} />
-        {data.authorizedUser == null ? 
-          <AppBarTab text={'Sign In'} route={'/signin'} /> :
-          <Pressable style={styles.signOut} onPress={signOut}><Text>Sign Out</Text></Pressable>
+        {data.authorizedUser == null ?
+          <AppBarTab text={'Sign In'} route={'/signin'} />:
+          <><AppBarTab text={'Create a review'} route={'/review'} />
+          <Pressable style={styles.signOut} onPress={signOut}><Text>Sign Out</Text></Pressable></>
         }
       </ScrollView>
     </View>

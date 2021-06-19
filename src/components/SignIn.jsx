@@ -12,7 +12,8 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    backgroundColor: 'white',
+    padding: 10,
   },
   signInButton: {
     borderStyle: 'solid',
@@ -20,8 +21,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
     backgroundColor: theme.colors.primary,
-    textAlign: 'center',
     margin: 5
+  },
+  buttonText: {
+    margin: 5,
+    textAlign: 'center'
   }
 });
 
@@ -39,13 +43,13 @@ const validationSchema = yup.object().shape({
 
 export const SignInContainer = ({ onSubmit }) => {
   return (
-    <Formik style={styles.container} initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+    <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
       {({ handleSubmit }) => (
         <View style={styles.container}>
           <FormikTextInput testID='usernameField' name='username' placeholder='Username' />
           <FormikTextInput testID='passwordField' name='password' placeholder='Password' secureTextEntry={true}/>
           <Pressable testID='submitButton' style={styles.signInButton} onPress={handleSubmit}>
-            <Text style={styles.signInButton}>Sign In</Text>
+            <Text style={styles.buttonText}>Sign In</Text>
           </Pressable>
         </View>
       )}
@@ -55,7 +59,7 @@ export const SignInContainer = ({ onSubmit }) => {
 
 const SignIn = () => {
   const [signIn] = useSignIn();
-  let history = useHistory();
+  const history = useHistory();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
