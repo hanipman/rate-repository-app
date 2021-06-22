@@ -1,22 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const OrderDirection = gql`
-  enum OrderDirection {
-    ASC,
-    DESC
-  }
-`;
-
-export const AllRepositoriesOrderBy = gql`
-  enum AllRepositoriesOrderBy {
-    CREATED_AT
-    RATING_AVERAGE
-  }
-`;
-
 export const GET_REPOSITORIES = gql`
-  query getRepositories($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy) {
-    repositories(orderDirection: $orderDirection, orderBy: $orderBy) {
+  query getRepositories($orderDirection: OrderDirection, $orderBy: AllRepositoriesOrderBy, $searchKeyword: String) {
+    repositories(orderDirection: $orderDirection, orderBy: $orderBy, searchKeyword: $searchKeyword) {
       totalCount
       edges {
         node {

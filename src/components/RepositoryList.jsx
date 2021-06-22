@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import { Button, Menu } from 'react-native-paper';
+import { Button, Menu, Searchbar } from 'react-native-paper';
+import { useDebounce } from 'use-debounce';
 
 import Text from './Text';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
-import { OrderDirection, AllRepositoriesOrderBy } from '../graphql/queries'; 
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
   },
   menuView: {
     padding: 10,
-    width: 'auto',
     flexDirection: 'row',
     justifyContent: 'center',
   },
@@ -77,21 +76,19 @@ const Order = {
   LOWEST_RATED: 'Lowest rated repository',
 };
 
-export const RepositoryListContainer = ({ repositories, orderBy, setOrderBy, visible, setVisible }) => {
-  const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
-
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <RepositoryItem
-          key={item.id}
-          item={item}
-          testID='item'
+export class RepositoryListContainer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  renderHeader = () => {
+    const { orderBy, setOrderBy, visible, setVisible, searchQuery, setSearchQuery } = this.props;
+    return (
+      <>
+        <Searchbar
+          placeholder='Search'
+          onChangeText={query => setSearchQuery(query)}
+          value={searchQuery}
         />
-      )}
-      ListHeaderComponent={
         <View style={styles.menuView}>
           <Menu
             visible={visible}
@@ -114,24 +111,46 @@ export const RepositoryListContainer = ({ repositories, orderBy, setOrderBy, vis
             }} />
           </Menu>
         </View>
-      }
-    />
-  );
-};
+      </>
+    );
+  }
+
+  render() {
+    const { repositories } = this.props;
+    const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => (
+          <RepositoryItem
+            key={item.id}
+            item={item}
+            testID='item'
+          />
+        )}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
 
 const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState(Order.LATEST);
   const [visible, setVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [value] = useDebounce(searchQuery, 500);
+
   let val = null;
   switch (orderBy) {
     case Order.LATEST:
-      val = useRepositories({ orderDirection: 'DESC', orderBy: 'CREATED_AT'});
+      val = useRepositories({ orderDirection: 'DESC', orderBy: 'CREATED_AT', searchKeyword: value });
       break;
     case Order.HIGHEST_RATED:
-      val = useRepositories({ orderDirection: 'DESC', orderBy: 'RATING_AVERAGE'});
+      val = useRepositories({ orderDirection: 'DESC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
       break;
     case Order.LOWEST_RATED:
-      val = useRepositories({ orderDirection: 'ASC', orderBy: 'RATING_AVERAGE'});
+      val = useRepositories({ orderDirection: 'ASC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
       break;
     default:
       val = useRepositories();
@@ -148,6 +167,8 @@ const RepositoryList = () => {
           setOrderBy={setOrderBy}
           visible={visible}
           setVisible={setVisible}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
         />;
 };
 
