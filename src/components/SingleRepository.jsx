@@ -30,6 +30,39 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
+class SingleRepositoryContainer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  renderHeader = () => {
+    const { repository } = this.props;
+    return (
+      <RepositoryInfo repository={repository} />
+    );
+  }
+
+  render() {
+    const { repository, onEndReached } = this.props;
+    const reviewNodes = repository.reviews ? repository.reviews.edges.map(edge => edge.node) : [];
+    return (
+      <FlatList
+        data={reviewNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => (
+          <ReviewItem
+            item={item}
+          />
+        )}
+        keyExtractor={({ id }) => id}
+        ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+      />
+    );
+  }
+}
+
 const RepositoryInfo = ({ repository }) => {
   const onPress = () => {
     Linking.openURL(repository.url);
@@ -52,24 +85,35 @@ const RepositoryInfo = ({ repository }) => {
 
 const SingleRepository = () => {
   const params = useParams();
-  const { data, error, loading } = useRepository(params.id);
+  const { repository, fetchMore, error, loading } = useRepository({ id: params.id, first: 10  });
   
   if (loading) return null;
   if (error) return <Text>{`Error: ${error}`}</Text>;
 
-  const reviewNodes = data.repository.reviews ? data.repository.reviews.edges.map(edge => edge.node) : [];
+  // const reviewNodes = repository.reviews ? repository.reviews.edges.map(edge => edge.node) : [];
+
+  const onEndReached = () => {
+    console.log('end reached');
+    fetchMore();
+  };
 
 	return (
-    <FlatList
-      data={reviewNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <ReviewItem
-          item={item}
-        />
-      )}
-      keyExtractor={({ id }) => id}
-      ListHeaderComponent={() => <RepositoryInfo repository={data.repository} />}
+    // <FlatList
+    //   data={reviewNodes}
+    //   ItemSeparatorComponent={ItemSeparator}
+    //   renderItem={({ item }) => (
+    //     <ReviewItem
+    //       item={item}
+    //     />
+    //   )}
+    //   keyExtractor={({ id }) => id}
+    //   ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+    //   onEndReached={onEndReached}
+    //   onEndReachedThreshold={0.5}
+    // />
+    <SingleRepositoryContainer
+      repository={repository}
+      onEndReached={onEndReached}
     />
 	);
 };

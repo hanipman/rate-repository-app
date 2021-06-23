@@ -116,7 +116,7 @@ export class RepositoryListContainer extends React.Component {
   }
 
   render() {
-    const { repositories } = this.props;
+    const { repositories, onEndReached } = this.props;
     const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
     return (
       <FlatList
@@ -130,6 +130,8 @@ export class RepositoryListContainer extends React.Component {
           />
         )}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -144,31 +146,36 @@ const RepositoryList = () => {
   let val = null;
   switch (orderBy) {
     case Order.LATEST:
-      val = useRepositories({ orderDirection: 'DESC', orderBy: 'CREATED_AT', searchKeyword: value });
+      val = useRepositories({ first: 8, orderDirection: 'DESC', orderBy: 'CREATED_AT', searchKeyword: value });
       break;
     case Order.HIGHEST_RATED:
-      val = useRepositories({ orderDirection: 'DESC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
+      val = useRepositories({ first: 8, orderDirection: 'DESC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
       break;
     case Order.LOWEST_RATED:
-      val = useRepositories({ orderDirection: 'ASC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
+      val = useRepositories({ first: 8, orderDirection: 'ASC', orderBy: 'RATING_AVERAGE', searchKeyword: value });
       break;
     default:
       val = useRepositories();
   }
 
-  const { data, loading, error } = val;
+  const { repositories, fetchMore, loading, error } = val;
 
   if (loading) return null;
   if (error) return <Text>{`Error: ${error}`}</Text>;
 
+  const onEndReached = () => {
+    fetchMore();
+  };
+
   return <RepositoryListContainer 
-          repositories={data.repositories}
+          repositories={repositories}
           orderBy={orderBy}
           setOrderBy={setOrderBy}
           visible={visible}
           setVisible={setVisible}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          onEndReached={onEndReached}
         />;
 };
 
