@@ -51,7 +51,10 @@ class SingleRepositoryContainer extends React.Component {
         ItemSeparatorComponent={ItemSeparator}
         renderItem={({ item }) => (
           <ReviewItem
-            item={item}
+            rating={item.rating}
+            title={item.user.username}
+            createdAt={item.createdAt}
+            text={item.text}
           />
         )}
         keyExtractor={({ id }) => id}
@@ -93,7 +96,6 @@ const SingleRepository = () => {
   // const reviewNodes = repository.reviews ? repository.reviews.edges.map(edge => edge.node) : [];
 
   const onEndReached = () => {
-    console.log('end reached');
     fetchMore();
   };
 

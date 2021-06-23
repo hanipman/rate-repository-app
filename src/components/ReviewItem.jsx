@@ -40,25 +40,25 @@ const styles = StyleSheet.create({
 	},
 });
 
-const ReviewItem = ({ item }) => {
-  const date = new Date(item.createdAt);
+const ReviewItem = ({ rating, title, createdAt, text }) => {
+  const date = new Date(createdAt);
 
 	return (
 		<View style={styles.container}>
       <View styles={styles.rating}>
         <Text style={styles.ratingText} fontWeight='bold'>
-          {item.rating}
+          {rating}
         </Text>
       </View>
       <View style={styles.textContainer}>
        <Text color='textSecondary' fontWeight='bold'>
-          {item.user.username}
+          {title}
         </Text>
         <Text color='textSecondary'>
           {date.toLocaleDateString()}
         </Text>
         <Text color='textSecondary'>
-          {item.text}
+          {text}
         </Text>
       </View>
 		</View>

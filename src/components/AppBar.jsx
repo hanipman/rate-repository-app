@@ -50,6 +50,7 @@ const AppBar = () => {
           <><AppBarTab text={'Sign In'} route={'/signin'} />
           <AppBarTab text={'Sign Up'} route={'/signup'} /></>:
           <><AppBarTab text={'Create a review'} route={'/review'} />
+          <AppBarTab text={'My reviews'} route={'/myreviews'} />
           <Pressable style={styles.signOut} onPress={signOut}><Text>Sign Out</Text></Pressable></>
         }
       </ScrollView>
