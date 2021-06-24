@@ -78,6 +78,7 @@ export const AUTHORIZED_USER = gql`
           node {
             id
             repository {
+              id
               fullName
             }
             rating
